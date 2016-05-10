@@ -1,4 +1,4 @@
-# WhatTheySaid: Explore Places Using Social Network
+# Happening: Explore Places Using Social Network
 ## Intro
 CS 237 Class Project
 
