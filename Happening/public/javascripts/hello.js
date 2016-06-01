@@ -21,7 +21,7 @@ app.factory('Twitter', function($http, $timeout) {
 });
 
 
-app.controller("AppCtrl", function ($scope, leafletData, Twitter) {
+app.controller("AppCtrl", function ($scope, leafletData, Twitter, $http) {
 
   $scope.init = function() {
     leafletData.getMap().then(function (map) {
@@ -48,7 +48,7 @@ app.controller("AppCtrl", function ($scope, leafletData, Twitter) {
         return {
           lng: tweet.coordinates[0],
           lat: tweet.coordinates[1],
-          message: tweet.text,
+          message: tweet.text
           // focus: true
         }
       });
@@ -58,6 +58,19 @@ app.controller("AppCtrl", function ($scope, leafletData, Twitter) {
   $scope.search = function () {
     Twitter.query($scope.place);
     $scope.map.fitBounds([[33.75174787568194, -117.66820907592773],[33.637489243170826, -117.96175003051756]]);
+    $http.get("assets/data/irvine_sentiment.json")
+      .success(function(data) {
+        var heat = [];
+        angular.forEach(data.data, function(d) {
+          var tmp = d["geo[coordinates]"];
+          tmp.push(d.score);
+          heat.push(tmp);
+        });
+        L.heatLayer(heat,{minOpacity: 0.5, max: 2.0}).addTo($scope.map);
+      })
+      .error(function(data) {
+        console.log("Load sentiment data failure");
+      });
   }
 
 });
