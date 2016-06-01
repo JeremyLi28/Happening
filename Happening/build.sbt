@@ -9,7 +9,11 @@ scalaVersion := "2.11.6"
 libraryDependencies ++= Seq(
   javaJdbc,
   cache,
-  javaWs
+  javaWs,
+  "org.webjars" % "bootstrap" % "3.0.0",
+  "org.webjars" % "angularjs" % "1.2.16",
+  "org.webjars" % "angular-leaflet-directive" % "0.8.2",
+  "com.typesafe.akka" %% "akka-actor" % "2.3.3"
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the
@@ -17,4 +21,4 @@ libraryDependencies ++= Seq(
 routesGenerator := InjectedRoutesGenerator
 
 
-fork in run := true
+//fork in run := true
