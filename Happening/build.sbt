@@ -13,7 +13,8 @@ libraryDependencies ++= Seq(
   "org.webjars" % "bootstrap" % "3.0.0",
   "org.webjars" % "angularjs" % "1.2.16",
   "org.webjars" % "angular-leaflet-directive" % "0.8.2",
-  "com.typesafe.akka" %% "akka-actor" % "2.3.3"
+  "com.typesafe.akka" %% "akka-actor" % "2.3.3",
+  "org.webjars" % "Leaflet.heat" % "0.2.0"
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the
