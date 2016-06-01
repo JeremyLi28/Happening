@@ -6,8 +6,8 @@ app.factory('Twitter', function($http) {
 
   var twitterService = {
     tweets: [],
-    query: function (query) {
-      ws.send(JSON.stringify({query: query}));
+    query: function (place) {
+      ws.send(JSON.stringify({place: place}));
     }
   };
 
@@ -16,7 +16,7 @@ app.factory('Twitter', function($http) {
       twitterService.tweets = JSON.parse(event.data).statuses;
     });
   };
-  
+
   return twitterService;
 });
 
@@ -40,5 +40,9 @@ app.controller("AppCtrl", function ($scope, leafletData, Twitter) {
       $scope.tweets = tweets;
     }
   );
+
+  $scope.search = function () {
+    Twitter.query($scope.place);
+  }
 
 });
