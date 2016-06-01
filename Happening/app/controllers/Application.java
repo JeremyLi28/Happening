@@ -67,11 +67,11 @@ public class Application extends Controller {
     private static Random rand = new java.util.Random();
 
     private static double randomLat() {
-        return (rand.nextDouble() * (-117.822395+117.859957)) -117.859957;
+        return (rand.nextDouble() * (-117.66820907592773+117.96175003051756)) -117.96175003051756;
     }
 
     private static double randomLon() {
-        return (rand.nextDouble() * (33.654339 - 33.632010)) + 33.632010;
+        return (rand.nextDouble() * (33.75174787568194 - 33.637489243170826)) + 33.637489243170826;
 
     }
 

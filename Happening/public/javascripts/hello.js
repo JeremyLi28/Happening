@@ -49,7 +49,7 @@ app.controller("AppCtrl", function ($scope, leafletData, Twitter) {
           lng: tweet.coordinates[0],
           lat: tweet.coordinates[1],
           message: tweet.text,
-          focus: true
+          // focus: true
         }
       });
     }
@@ -57,7 +57,7 @@ app.controller("AppCtrl", function ($scope, leafletData, Twitter) {
 
   $scope.search = function () {
     Twitter.query($scope.place);
-    $scope.map.fitBounds([[33.654339, -117.859957],[33.632010, -117.822395]]);
+    $scope.map.fitBounds([[33.75174787568194, -117.66820907592773],[33.637489243170826, -117.96175003051756]]);
   }
 
 });
