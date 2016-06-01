@@ -1,4 +1,4 @@
-name := """play-java-2.4"""
+name := """Happening"""
 
 version := "1.0-SNAPSHOT"
 
