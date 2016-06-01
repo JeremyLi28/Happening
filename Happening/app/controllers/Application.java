@@ -38,8 +38,8 @@ public class Application extends Controller {
         return WebSocket.withActor(UserActor::props);
     }
 
-    public static Promise<JsonNode> fetchTweets(String query) {
-        Promise<WSResponse> responsePromise = WS.url("http://twitter-search-proxy.herokuapp.com/search/tweets").setQueryParameter("q", "trump").get();
+    public static Promise<JsonNode> fetchTweets(String place) {
+        Promise<WSResponse> responsePromise = WS.url("http://twitter-search-proxy.herokuapp.com/search/tweets").setQueryParameter("q", place).get();
         return responsePromise
                 .filter(response -> response.getStatus() == Http.Status.OK)
                 .map(response -> filterTweetsWithLocation(response.asJson()))
@@ -67,11 +67,12 @@ public class Application extends Controller {
     private static Random rand = new java.util.Random();
 
     private static double randomLat() {
-        return (rand.nextDouble() * 180) - 90;
+        return (rand.nextDouble() * (-117.822395+117.859957)) -117.859957;
     }
 
     private static double randomLon() {
-        return (rand.nextDouble() * 360) - 180;
+        return (rand.nextDouble() * (33.654339 - 33.632010)) + 33.632010;
+
     }
 
     private static JsonNode errorResponse(Throwable ignored) {

@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import scala.concurrent.duration.Duration;
 import java.util.concurrent.TimeUnit;
+import java.util.Optional;
+
 
 
 import scala.App;
@@ -16,6 +18,8 @@ public class UserActor extends UntypedActor {
     public static Props props(ActorRef out) {
         return Props.create(UserActor.class, out);
     }
+
+    public Optional<String> optQuery = Optional.empty();
 
     private final ActorRef out;
 
@@ -29,18 +33,23 @@ public class UserActor extends UntypedActor {
         if (message instanceof String) {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode json = mapper.readTree((String)message);
-            System.out.println(json.get("place").textValue());
+            optQuery = Optional.of(json.get("place").textValue());
+            fetchTweets(json.get("place").textValue());
         }
         else if (message instanceof fetchTweetsMessage) {
-            Application.fetchTweets("place").onRedeem(json -> {
-                System.out.println("fetchTweets");
-                out.tell(json.toString(), getSelf());
-            });
+            optQuery.ifPresent(this::fetchTweets);
         }
         else {
             System.out.println("unhandled message");
             unhandled(message);
         }
+    }
+
+    private void fetchTweets(String place) {
+        Application.fetchTweets(place).onRedeem(json -> {
+            System.out.println("fetchTweets");
+            out.tell(json.toString(), getSelf());
+        });
     }
 
 
