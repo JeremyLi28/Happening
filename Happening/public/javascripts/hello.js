@@ -1,6 +1,6 @@
 var app = angular.module("Happening", ['leaflet-directive']);
 
-app.factory('Twitter', function($http) {
+app.factory('Twitter', function($http, $timeout) {
 
   var ws = new WebSocket("ws://localhost:9000/ws");
 
@@ -13,6 +13,7 @@ app.factory('Twitter', function($http) {
 
   ws.onmessage = function(event) {
     $timeout(function() {
+      console.log(event.data);
       twitterService.tweets = JSON.parse(event.data).statuses;
     });
   };
