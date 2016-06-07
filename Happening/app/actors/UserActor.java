@@ -47,7 +47,6 @@ public class UserActor extends UntypedActor {
 
     private void fetchTweets(String place) {
         Application.fetchTweets(place).onRedeem(json -> {
-            System.out.println("fetchTweets");
             out.tell(json.toString(), getSelf());
         });
     }
@@ -57,5 +56,10 @@ public class UserActor extends UntypedActor {
     Cancellable cancellable = system.scheduler().schedule(Duration.Zero(),
             Duration.create(5, TimeUnit.SECONDS), getSelf(), new fetchTweetsMessage(),
             system.dispatcher(), null);
+
+    @Override
+    public void postStop() {
+        cancellable.cancel();
+    }
 }
 
