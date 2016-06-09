@@ -3,21 +3,26 @@
 @main("Happening") {
 
     <div class="container-fluid" ng-controller="AppCtrl">
-        <div class="row">
-            <form class="form-inline container" id="search-form" ng-submit="search()">
-                <h1> Happening </h1>
-                <div class="form-group">
-                    <div class="controls">
-                        <label>Place</label>
-                        <input type="text" ng-model="place" placeholder="Search for location" required/>
-                    </div>
+        <nav class="navbar navbar-default navbar-fixed-top" style="background-color: white">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">
+                        <img src=@routes.Assets.versioned("images/logo.png") style="width:280px">
+                    </a>
                 </div>
-                <button type="submit" class="btn btn-default" id="insert-button">Search</button>
-            </form>
-        </div>
-        <div class="row">
-            <leaflet lf-center="Irvine" width="100%" height="800px" ng-init="init()" markers="markers"></leaflet>
-        </div>
+                <div class="collapse navbar-collapse" id="search-form" ng-submit="search()">
+                    <form class="navbar-form navbar-left" role="search" style="margin-top: 40px; margin-left: 20px;">
+                        <div class="form-group">
+                            <div class="controls">
+                                <input type="text" ng-model="place" class="form-control" placeholder="Search for location" required/>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-default" id="insert-button">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+        <leaflet lf-center="Irvine" width="100%" height="1000px" ng-init="init()" markers="markers"></leaflet>
         @*<div class="row">*@
             @*<ul>*@
                 @*<li ng-repeat="tweet in tweets">{{tweet.text}}</li>*@
