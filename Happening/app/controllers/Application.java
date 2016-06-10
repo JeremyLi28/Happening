@@ -20,6 +20,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import static java.util.stream.Collectors.toList;
 import static utils.Streams.stream;
 import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
 
 import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.auth.OAuthAuthorization;
@@ -32,11 +38,10 @@ import twitter4j.QueryResult;
 import twitter4j.Status;
 
 import org.json.JSONObject;
-
-
-
-
-
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.VoidFunction;
 
 
 
@@ -110,7 +115,7 @@ public class Application extends Controller {
         double latitude = 40.712784;
         double longtitude =  -74.005941;
         double radius = 50;
-        int count = 30;
+        int count = 20;
         List<JSONObject> jsons = new ArrayList<>();
         List<twitter4j.Status> tweets = searchTwitter(latitude, longtitude, radius, count);
         for(int i=0; i<tweets.size(); i++) {
@@ -120,6 +125,17 @@ public class Application extends Controller {
                 System.out.println(tweets.get(i).getId() + "," + tweets.get(i).getGeoLocation().getLatitude() + "," + tweets.get(i).getGeoLocation().getLongitude());
             }
         }
+
+        SparkConf conf = new SparkConf().setMaster("local[2]").setAppName("SearchTwitterApplication");
+        JavaSparkContext sc = new JavaSparkContext(conf);
+        JavaRDD<twitter4j.Status> tweetsRdd = sc.parallelize(tweets);
+
+        List<String> scores = computeSentiment(tweetsRdd);
+        for (String score: scores) {
+            System.out.println(score);
+        }
+
+        sc.close();
         return jsons;
     }
 
@@ -166,6 +182,62 @@ public class Application extends Controller {
         }
 
         return json;
+    }
+
+
+    private static List<String> computeSentiment(JavaRDD<twitter4j.Status> tweetsRdd) {
+        readWords("pos-words.txt", posWords);
+        readWords("neg-words.txt", negWords);
+        readWords("stop-words.txt", stopWords);
+
+        JavaRDD<JSONObject> json = tweetsRdd.filter(x -> (x.getText().length() > 0))
+                .map(x -> twitterToJSON(x))
+                .map(x -> computeScore(x));
+
+        JavaRDD<String> serialized = json.map(x -> x.toString());
+
+//		serialized.foreach(new VoidFunction<String>() {
+//			public void call(String str) {
+//				System.out.println(str);
+//			}
+//		});
+
+        List<String> scores = serialized.collect();
+        return scores;
+    }
+
+    private static JSONObject computeScore(JSONObject json) throws JSONException {
+        String[] strs = json.get("text").toString().split(" ");
+        double score = 0;
+
+        for (String str: strs) {
+            if (stopWords.contains(str)) {
+                continue;
+            } else if (posWords.contains(str)) {
+                score ++;
+            } else if (negWords.contains(str)) {
+                score --;
+            }
+        }
+        json.append("score", Double.toString(score/strs.length));
+        return json;
+    }
+
+    private static void readWords(String filename, Set<String> words) {
+        ClassLoader classLoader = Application.class.getClassLoader();
+        File file = new File(classLoader.getResource(filename).getFile());
+        try (Scanner scanner = new Scanner(file)) {
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                words.add(line);
+            }
+
+            scanner.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -16,7 +16,9 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % "2.3.3",
   "org.webjars" % "Leaflet.heat" % "0.2.0",
   "org.twitter4j"% "twitter4j-core"% "4.0.4",
-  "org.json"%"org.json"%"chargebee-1.0"
+  "org.json"%"org.json"%"chargebee-1.0",
+  "org.apache.spark" %% "spark-core" % "1.6.1",
+  "org.apache.spark" %% "spark-streaming-twitter" % "1.6.1"
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the
