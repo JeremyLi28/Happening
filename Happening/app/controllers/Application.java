@@ -93,7 +93,7 @@ public class Application extends Controller {
 //        return nextStatus;
 //    }
 //
-//    private static Random rand = new java.util.Random();
+    private static Random rand = new java.util.Random();
 //
 //    private static double randomLat() {
 //        return (rand.nextDouble() * (-117.66820907592773+117.96175003051756)) -117.96175003051756;
@@ -112,17 +112,16 @@ public class Application extends Controller {
     public static List<JSONObject> fetchTweet() throws TwitterException, JSONException {
         setUpTwitter();
 
-        double latitude = 40.712784;
-        double longtitude =  -74.005941;
-        double radius = 50;
-        int count = 20;
+        double latitude = 33.6839;
+        double longtitude =  -117.7947;
+        double radius = 20;
+        int count = 10;
         List<JSONObject> jsons = new ArrayList<>();
         List<twitter4j.Status> tweets = searchTwitter(latitude, longtitude, radius, count);
         for(int i=0; i<tweets.size(); i++) {
-            if(tweets.get(i).getGeoLocation() != null && !tweetId.contains(tweets.get(i).getId())) {
+            if(!tweetId.contains(tweets.get(i).getId())) {
                 tweetId.add(tweets.get(i).getId());
                 jsons.add(twitterToJSON(tweets.get(i)));
-                System.out.println(tweets.get(i).getId() + "," + tweets.get(i).getGeoLocation().getLatitude() + "," + tweets.get(i).getGeoLocation().getLongitude());
             }
         }
 
@@ -175,7 +174,8 @@ public class Application extends Controller {
         json.append("text", twitter.getText().toLowerCase().replaceAll("[^0-9a-zA-Z\\s]+", ""));
         //geoLocation
         if (twitter.getGeoLocation() == null) {
-            json.append("location", null);
+            json.append("location", (rand.nextDouble() * (-117.66820907592773+117.96175003051756)) -117.96175003051756);
+            json.append("location", (rand.nextDouble() * (33.75174787568194 - 33.637489243170826)) + 33.637489243170826);
         } else {
             json.append("location", Double.toString(twitter.getGeoLocation().getLatitude()));
             json.append("location", Double.toString(twitter.getGeoLocation().getLongitude()));
