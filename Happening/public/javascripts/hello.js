@@ -35,6 +35,8 @@ app.controller("AppCtrl", function ($scope, leafletData, Twitter, $http) {
 
   $scope.tweets = [];
   $scope.markers = [];
+  $scope.heat = [];
+  $scope.count = 0;
 
   $scope.$watch(
     function() {
@@ -43,9 +45,22 @@ app.controller("AppCtrl", function ($scope, leafletData, Twitter, $http) {
     function(tweets) {
       if(tweets == null || tweets.length==0)
           return;
+
+      tweets.location[0] = parseFloat(tweets.location[0]);
+      tweets.location[1] = parseFloat(tweets.location[1]);
+
+
       $scope.tweets.push(tweets);
 
-
+      if($scope.heatLayer) {
+        $scope.map.removeLayer($scope.heatLayer);
+        tweets.location.push((Math.random() * -0.2) + 0.1 );
+        $scope.heat.push(tweets);
+        $scope.count += 1;
+        if($scope.count%10 == 0)
+          $scope.heatLayer = L.heatLayer(heat,{minOpacity: 0.5, max: 2.0});
+          $scope.map.addLayer($scope.heatLayer);
+      }
       $scope.markers.push({
         lng: parseFloat(tweets.location[1]),
         lat: parseFloat(tweets.location[0]),
@@ -60,13 +75,14 @@ app.controller("AppCtrl", function ($scope, leafletData, Twitter, $http) {
     $scope.map.fitBounds([[33.75174787568194, -117.66820907592773],[33.637489243170826, -117.96175003051756]]);
     $http.get("assets/data/irvine_sentiment.json")
       .success(function(data) {
-        var heat = [];
         angular.forEach(data.data, function(d) {
           var tmp = d["geo[coordinates]"];
           tmp.push(d.score);
-          heat.push(tmp);
+          $scope.heat.push(tmp);
         });
-        L.heatLayer(heat,{minOpacity: 0.5, max: 2.0}).addTo($scope.map);
+
+        $scope.heatLayer = L.heatLayer(heat,{minOpacity: 0.5, max: 2.0});
+        $scope.map.addLayer($scope.heatLayer);
       })
       .error(function(data) {
         console.log("Load sentiment data failure");
