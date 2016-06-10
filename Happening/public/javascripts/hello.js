@@ -55,10 +55,10 @@ app.controller("AppCtrl", function ($scope, leafletData, Twitter, $http) {
       if($scope.heatLayer) {
         $scope.map.removeLayer($scope.heatLayer);
         tweets.location.push((Math.random() * -0.2) + 0.1 );
-        $scope.heat.push(tweets);
+        $scope.heat.push(tweets.location);
         $scope.count += 1;
         if($scope.count%10 == 0)
-          $scope.heatLayer = L.heatLayer(heat,{minOpacity: 0.5, max: 2.0});
+          $scope.heatLayer = L.heatLayer($scope.heat,{minOpacity: 0.5, max: 2.0});
           $scope.map.addLayer($scope.heatLayer);
       }
       $scope.markers.push({
@@ -81,7 +81,7 @@ app.controller("AppCtrl", function ($scope, leafletData, Twitter, $http) {
           $scope.heat.push(tmp);
         });
 
-        $scope.heatLayer = L.heatLayer(heat,{minOpacity: 0.5, max: 2.0});
+        $scope.heatLayer = L.heatLayer($scope.heat,{minOpacity: 0.5, max: 2.0});
         $scope.map.addLayer($scope.heatLayer);
       })
       .error(function(data) {
