@@ -13,7 +13,9 @@ app.factory('Twitter', function($http, $timeout) {
 
   ws.onmessage = function(event) {
     $timeout(function() {
-      twitterService.tweets = JSON.parse(event.data).statuses;
+      console.log(event.data);
+      twitterService.tweets = JSON.parse(event.data);
+      console.log(JSON.parse(event.data))
     });
   };
 
@@ -39,18 +41,16 @@ app.controller("AppCtrl", function ($scope, leafletData, Twitter, $http) {
       return Twitter.tweets;
     },
     function(tweets) {
-      if(tweets == null)
+      if(tweets == null || tweets.length==0)
           return;
-      $scope.tweets = tweets;
+      $scope.tweets.push(tweets);
 
-      $scope.markers = tweets.map(function(tweet) {
-        // console.log(tweet.coordinates);
-        return {
-          lng: tweet.coordinates[0],
-          lat: tweet.coordinates[1],
-          message: tweet.text
-          // focus: true
-        }
+
+      $scope.markers.push({
+        lng: parseFloat(tweets.location[1]),
+        lat: parseFloat(tweets.location[0]),
+        message: tweets.text[0],
+        focus: true
       });
     }
   );

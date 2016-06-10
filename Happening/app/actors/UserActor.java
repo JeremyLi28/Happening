@@ -5,13 +5,19 @@ import controllers.Application.*;
 import akka.actor.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.json.JSONException;
+import org.json.JSONObject;
 import scala.concurrent.duration.Duration;
 import java.util.concurrent.TimeUnit;
-import java.util.Optional;
+import java.util.*;
+
+
 
 
 
 import scala.App;
+import twitter4j.TwitterException;
+import twitter4j.json.DataObjectFactory;
 
 public class UserActor extends UntypedActor {
 
@@ -22,6 +28,8 @@ public class UserActor extends UntypedActor {
     public Optional<String> optQuery = Optional.empty();
 
     private final ActorRef out;
+    private static final Set<Long> tweetId = new HashSet<>();
+
 
     public UserActor(ActorRef out) {
         this.out = out;
@@ -37,7 +45,8 @@ public class UserActor extends UntypedActor {
             fetchTweets(json.get("place").textValue());
         }
         else if (message instanceof fetchTweetsMessage) {
-            optQuery.ifPresent(this::fetchTweets);
+//            optQuery.ifPresent(this::fetchTweets);
+            fetchTweets("Irvine");
         }
         else {
             System.out.println("unhandled message");
@@ -45,10 +54,14 @@ public class UserActor extends UntypedActor {
         }
     }
 
-    private void fetchTweets(String place) {
-        Application.fetchTweets(place).onRedeem(json -> {
-            out.tell(json.toString(), getSelf());
-        });
+    private void fetchTweets (String place) throws TwitterException, JSONException {
+//        Application.fetchTweets(place).onRedeem(json -> {
+//            out.tell(json.toString(), getSelf());
+//        });
+        List<JSONObject> tweets = Application.fetchTweet();
+        for(JSONObject tweet: tweets) {
+            out.tell(tweet.toString(), getSelf());
+        }
     }
 
 

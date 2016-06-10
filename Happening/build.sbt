@@ -14,7 +14,9 @@ libraryDependencies ++= Seq(
   "org.webjars" % "angularjs" % "1.2.16",
   "org.webjars" % "angular-leaflet-directive" % "0.8.2",
   "com.typesafe.akka" %% "akka-actor" % "2.3.3",
-  "org.webjars" % "Leaflet.heat" % "0.2.0"
+  "org.webjars" % "Leaflet.heat" % "0.2.0",
+  "org.twitter4j"% "twitter4j-core"% "4.0.4",
+  "org.json"%"org.json"%"chargebee-1.0"
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the
