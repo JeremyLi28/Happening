@@ -21,6 +21,10 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-streaming-twitter" % "1.6.1"
 )
 
+dependencyOverrides ++= Set(
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.4.4"
+)
+
 // Play provides two styles of routers, one expects its actions to be injected, the
 // other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator
