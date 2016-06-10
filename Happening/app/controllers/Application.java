@@ -174,8 +174,8 @@ public class Application extends Controller {
         json.append("text", twitter.getText().toLowerCase().replaceAll("[^0-9a-zA-Z\\s]+", ""));
         //geoLocation
         if (twitter.getGeoLocation() == null) {
-            json.append("location", (rand.nextDouble() * (-117.66820907592773+117.96175003051756)) -117.96175003051756);
-            json.append("location", (rand.nextDouble() * (33.75174787568194 - 33.637489243170826)) + 33.637489243170826);
+            json.append("location", Double.toString((rand.nextDouble() * (33.75174787568194 - 33.637489243170826)) + 33.637489243170826));
+            json.append("location", Double.toString((rand.nextDouble() * (-117.66820907592773+117.96175003051756)) -117.96175003051756));
         } else {
             json.append("location", Double.toString(twitter.getGeoLocation().getLatitude()));
             json.append("location", Double.toString(twitter.getGeoLocation().getLongitude()));
