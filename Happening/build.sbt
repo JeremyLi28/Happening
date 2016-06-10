@@ -22,7 +22,10 @@ libraryDependencies ++= Seq(
 )
 
 dependencyOverrides ++= Set(
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.6.0"
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.6.0" ,
+  "com.fasterxml.jackson.module" % "jackson-module-scala" % "2.6.0"
+
+
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the
