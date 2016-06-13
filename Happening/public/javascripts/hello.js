@@ -54,7 +54,7 @@ app.controller("AppCtrl", function ($scope, leafletData, Twitter, $http) {
 
       if($scope.heatLayer) {
         $scope.map.removeLayer($scope.heatLayer);
-        tweets.location.push((Math.random() * -0.2) + 0.1 );
+        tweets.location.push(tweets.score );
         $scope.heat.push(tweets.location);
         $scope.count += 1;
         if($scope.count%10 == 0)

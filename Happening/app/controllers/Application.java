@@ -127,12 +127,12 @@ public class Application extends Controller {
 
         SparkConf conf = new SparkConf().setMaster("local[2]").setAppName("SearchTwitterApplication");
         JavaSparkContext sc = new JavaSparkContext(conf);
-//        JavaRDD<twitter4j.Status> tweetsRdd = sc.parallelize(tweets);
-//
-//        List<String> scores = computeSentiment(tweetsRdd);
-//        for (String score: scores) {
-//            System.out.println(score);
-//        }
+        JavaRDD<twitter4j.Status> tweetsRdd = sc.parallelize(tweets);
+
+        List<String> scores = computeSentiment(tweetsRdd);
+        for (String score: scores) {
+            System.out.println(score);
+        }
 
         sc.close();
         return jsons;
