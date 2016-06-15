@@ -1,4 +1,6 @@
 # Happening
+![screenshot](https://raw.githubusercontent.com/JeremyLi28/Happening/master/Happening/public/images/screenshot.png)
+
 ## Intro
 
 Realtime Tweets Sentiment Analysis Application built on [Apache Spark](http://spark.apache.org), [Play Framework](https://www.playframework.com) and [AngularJs](https://angularjs.org)
@@ -10,6 +12,10 @@ Realtime Tweets Sentiment Analysis Application built on [Apache Spark](http://sp
 + Realtime sentiment analysis: Spark
 + Backend: Play/Akka
 + Frontend: AngularJs
+
+## Requirements
+
+Java8 & sbt
 
 ## How to run
 
